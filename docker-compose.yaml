@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+    backend:
+        build:
+            context: ./backend
+        ports:
+            - "3000:3000"
+        entrypoint: "npm run dev"
+        volumes:
+          - /usr/src/app/node_modules
+          - ./backend/:/usr/src/app
+    frontend:
+        restart: always
+        build:
+            context: ./frontend
+        ports:
+            - "80:3000"
+        volumes:
+          - ./frontend/src:/app/src
+        depends_on:
+          - backend
+        

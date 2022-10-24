@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Interesting Document</h1>
+    <button id="button-1">Click here</button>
+</body>
+<script>
+    const state = {
+        accessToken: ""
+    }
+
+
+    const button = document.getElementById('button-1')
+    button.addEventListener('click', async () => {
+        const response = await fetch("http://localhost/login", {
+            method: "POST",
+            body: JSON.stringify({
+                username: "admin",
+                password: "admin123"
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        const data = await response.json()
+        if (data.message == "ok") {
+            accessToken.state = data.message.token
+            document.location.href = window.location.origin + "/admin"
+        }
+    })
+</script>
+
+</html>
