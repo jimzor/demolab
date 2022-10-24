@@ -5,7 +5,7 @@ import { URL } from "../config"
 export default function Home({isAuth, setIsAuth}) {
 
     const req = async () => {
-        const request = await fetch(`http://${URL}/api/login`, {
+        const request = await fetch(`${URL}/api/login`, {
             method: "POST",
             body: JSON.stringify({
                 username: "admin",
