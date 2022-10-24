@@ -1,11 +1,12 @@
 import React, { useState } from "react"
+import { URL } from "../config"
 
 
 export default function Admin() {
     const [textareaState,setTextareaState] = useState("")
     const [result, setResult] = useState("0")
     const submitTextHandler = async () => {
-        const request = await fetch("http://13.73.225.17/calculate", {
+        const request = await fetch(`http://${URL}/calculate`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

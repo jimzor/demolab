@@ -1,10 +1,11 @@
 import React from "react"
+import { URL } from "../config"
 
 
 export default function Home({isAuth, setIsAuth}) {
 
     const req = async () => {
-        const request = await fetch("http://13.73.225.17/api/login", {
+        const request = await fetch(`http://${URL}/api/login`, {
             method: "POST",
             body: JSON.stringify({
                 username: "admin",
