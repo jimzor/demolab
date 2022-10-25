@@ -6,7 +6,7 @@ export default function Admin() {
     const [textareaState,setTextareaState] = useState("")
     const [result, setResult] = useState("0")
     const submitTextHandler = async () => {
-        const request = await fetch(`${URL}/calculate`, {
+        const request = await fetch(`${URL}/api/calculate`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
