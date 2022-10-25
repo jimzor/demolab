@@ -8,17 +8,16 @@ app.use(express.json({ limit: "5mb" }));
 
 const sendSyslog = async (message) => {
     var syslog = require("syslog-client");
-    var client = syslog.createClient("127.0.0.1");
+    var client = syslog.createClient("192.168.1.37");
 
-    client.log("FancyCalculatorApp " + message);
+    await client.log("FancyCalculatorApp " + message);
     client.close()
 }
 
 
 app.use((req, res, next) => {
+    next()
     const allowedOrigins = ['http://localhost:3000', 'http://13.73.225.17'];
-    const origin = req.headers.origin;
-    console.log(origin)
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     } else {
@@ -39,14 +38,14 @@ app.post('/api/login', (req, res) => {
     console.log(req.body)
     const username = req.body.username
     const password = req.body.password
-
+    console.log(req.headers)
     if (password == "admin123" && username == "admin") {
         const token = Math.random().toString()
         tokens.push(token)
-        sendSyslog(`Authentication with username ${username} successful!`)
+        sendSyslog(`Authentication with username ${username} from ip address: ${req.headers["x-forwarded-for"]} successful!`)
         return res.json({ status: "ok", token: token })
     } else {
-        sendSyslog(`Authentication with username ${username} failed`)
+        sendSyslog(`Authentication with username ${username} with ip address: ${req.headers["x-forwarded-for"]} failed`)
         return res.statusCode(400).json({ message: "Authentication failed." })
     }
 })
@@ -59,4 +58,4 @@ app.post("/api/calculate", (req, res) => {
 
 
 
-app.listen(3000, () => console.log('Server is up and running')); 
+app.listen(3000, () => console.log('Server is up and running'));
