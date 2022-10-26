@@ -17,6 +17,7 @@ const sendSyslog = async (message) => {
 
 app.use((req, res, next) => {
     next()
+    return
     const allowedOrigins = ['http://localhost:3000', 'http://13.73.225.17'];
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
@@ -50,10 +51,11 @@ app.post('/api/login', (req, res) => {
     }
 })
 
-app.post("/api/calculate", (req, res) => {
+app.post("/api/calculate", async (req, res) => {
     //check token
     console.log(req.body.calc)
-    return res.json({ status: "Note added", data: eval(req.body.calc) })
+    const data = await eval(req.body.calc)
+    return res.json({   data: data })
 })
 
 

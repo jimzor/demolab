@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { URL } from "../config"
 import TextField from '@mui/material/TextField';
 import { Button } from "@mui/material";
@@ -7,23 +7,31 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
-export default function Home({ isAuth, setIsAuth }) {
+export default function Login({ isAuth, setIsAuth }) {
+    const [creds, setCreds] = useState({
+        username: "",
+        password: ""
+    })
 
-    const req = async () => {
+    const authHandler = async () => {
         const request = await fetch(`${URL}/api/login`, {
             method: "POST",
             body: JSON.stringify({
-                username: "admin",
-                password: "admin123"
+                username: creds.username,
+                password: creds.password
             }),
             headers: {
                 "Content-Type": "application/json"
             }
         })
 
+        if (!request.ok) {
+            alert("Username or Password is incorrect!")
+        }
+
         const resData = await request.json()
         console.log(resData)
-        if (resData.status == "ok")
+        if (resData.status === "ok")
             setIsAuth(true)
     }
 
@@ -35,6 +43,9 @@ export default function Home({ isAuth, setIsAuth }) {
         }}>
             <div></div>
             <div style={{
+                position: 'absolute',
+                top: 200,
+                right: 500,
                 height: '400px',
                 margin: 'auto',
                 display: 'flex',
@@ -68,7 +79,7 @@ export default function Home({ isAuth, setIsAuth }) {
                         </div>
                     </div>
                 </div>
-                <div style={{marginTop:'-50px'}}>
+                <div style={{ marginTop: '-50px' }}>
                     <TextField
                         fullWidth
                         style={{ margin: '10px 0' }}
@@ -76,6 +87,8 @@ export default function Home({ isAuth, setIsAuth }) {
                         label="username"
                         defaultValue=""
                         variant="filled"
+                        value={creds.username}
+                        onChange={e => setCreds(state => ({ ...state, username: e.target.value }))}
                     />
                     <TextField
                         fullWidth
@@ -85,12 +98,13 @@ export default function Home({ isAuth, setIsAuth }) {
                         label="Password"
                         type="password"
                         autoComplete="current-password"
+                        value={creds.password}
+                        onChange={e => setCreds(state => ({ ...state, password: e.target.value }))}
                     />
-                    <Button fullWidth variant="contained">Login</Button>
+                    <Button onClick={authHandler} fullWidth variant="contained">Login</Button>
                     <div style={{ margin: '10px auto' }}><span>Don't have a account?  </span><span style={{ fontWeight: 'bold', color: 'blue' }}>Sign up</span></div>
                 </div>
             </div>
-            <button onClick={() => req()}>Click here</button>
         </div>
     )
 }
